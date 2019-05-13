@@ -57,6 +57,13 @@ public class front {
                 }
             }
         }
+        // -------------init------------
+        JPanel jp = new JPanel();
+        jp.setSize(width, height);
+        jp.setLocation(0, 0);
+        jp.setLayout(null);
+        jp.setOpaque(false);
+        f.add(jp);
 
         System.out.println("accounting");
         // -------------add prices--------------
@@ -66,7 +73,7 @@ public class front {
             lab_pr[i].setForeground(Color.black);
             lab_pr[i].setBounds(width / 2 + (i - 2) * (plate_w * 3 / 2) + 15, plate_h + 15, plate_w, plate_h);
             lab_pr[i].setFont(new Font("黑体", Font.PLAIN, 18));
-            f.add(lab_pr[i]);
+            jp.add(lab_pr[i]);
         }
         for (int i = 4; i < 7; i++) {
             lab_pr[i] = new JLabel(colors_CN[i] + ":" + prices[i] + "元");
@@ -74,56 +81,56 @@ public class front {
             lab_pr[i].setBounds(width / 2 - plate_w / 2 + (i - 5) * (plate_w * 3 / 2) + 15, 3 * plate_h + 15, plate_w,
                     plate_h);
             lab_pr[i].setFont(new Font("黑体", Font.PLAIN, 18));
-            f.add(lab_pr[i]);
+            jp.add(lab_pr[i]);
         }
-        f.repaint();
+        jp.repaint();
         // --------------add plates-------------
         ImageIcon[] im_p = new ImageIcon[num_plate];
         JLabel[] lab_p = new JLabel[num_plate];
         for (int i = 0; i < 4; i++) {
             im_p[i] = new ImageIcon("plate/" + colors[i] + ".jpg");
             lab_p[i] = new JLabel(im_p[i]);
-            f.getLayeredPane().add(lab_p[i], new Integer(Integer.MIN_VALUE));
+            jp.add(lab_p[i], new Integer(Integer.MIN_VALUE));
             lab_p[i].setBounds(width / 2 + (i - 2) * (plate_w * 3 / 2), plate_h / 2, plate_w, plate_h);
         }
         for (int i = 4; i < 7; i++) {
             im_p[i] = new ImageIcon("plate/" + colors[i] + ".jpg");
             lab_p[i] = new JLabel(im_p[i]);
-            f.getLayeredPane().add(lab_p[i], new Integer(Integer.MIN_VALUE));
+            jp.add(lab_p[i], new Integer(Integer.MIN_VALUE));
             lab_p[i].setBounds(width / 2 - plate_w / 2 + (i - 5) * (plate_w * 3 / 2), 5 * plate_h / 2, plate_w,
                     plate_h);
         }
-        JPanel p = (JPanel) f.getContentPane();
-        p.setOpaque(false);
         // ---------------add buttons---------------
         JButton b_quit = new JButton("退出");
         b_quit.setFont(new Font("宋体", Font.BOLD, 16));
         b_quit.setBounds(600, height * 3 / 4, 100, 50);
         b_quit.addActionListener(new A_quit());
-        f.add(b_quit);
+        jp.add(b_quit);
         JButton b_open = new JButton("选择图片");
         b_open.setFont(new Font("宋体", Font.BOLD, 14));
         b_open.setBounds(475, height * 3 / 4, 100, 50);
         b_open.addActionListener(new open_file());
-        f.add(b_open);
+        jp.add(b_open);
     }
 
     public static void welcome() {
         class A_go implements ActionListener {
             private JFrame ff;
+            private JPanel jpp;
 
-            public A_go(JFrame f) {
+            public A_go(JFrame f, JPanel pp) {
                 ff = f;
+                jpp = pp;
             }
 
             public void actionPerformed(ActionEvent e) {
-                for (Component co : ff.getContentPane().getComponents()) {
-                    ff.remove(co);
-                }
-                for (Component co : ff.getLayeredPane().getComponents()) {
-                    if (!co.getClass().getName().equals("javax.swing.JPanel"))
-                        ff.getLayeredPane().remove(co);
-                }
+                /*
+                 * for (Component co : ff.getContentPane().getComponents()) { ff.remove(co); }
+                 * for (Component co : ff.getLayeredPane().getComponents()) { if
+                 * (!co.getClass().getName().equals("javax.swing.JPanel"))
+                 * ff.getLayeredPane().remove(co); }
+                 */
+                ff.remove(jpp);
                 accounting(ff);
             }
         }
@@ -135,38 +142,42 @@ public class front {
         System.out.println("welcome");
         // ---------------init--------------
         JFrame f = new JFrame("Settle Account");
+        JPanel jp = new JPanel();
         f.setSize(width, height);
         f.setLocation(580, 240);
         f.setLayout(null);
+        jp.setSize(width, height);
+        jp.setLocation(0, 0);
+        jp.setLayout(null);
+        jp.setOpaque(false);
+        f.add(jp);
         // --------------add text --------------
         JLabel title = new JLabel("欢迎使用自助结账！");
         title.setForeground(Color.black);
         title.setBounds(50, 100, 500, 50);
         title.setFont(new Font("黑体", Font.PLAIN, 36));
-        f.add(title);
+        jp.add(title);
 
         // --------------add button------------
         JButton b_go = new JButton("开始使用");
         b_go.setFont(new Font("宋体", Font.BOLD, 14));
         b_go.setBounds(475, height * 3 / 4 - 50, 100, 50);
-        b_go.addActionListener(new A_go(f));
-        f.add(b_go);
+        b_go.addActionListener(new A_go(f, jp));
+        jp.add(b_go);
         JButton b_quit = new JButton("退出");
         b_quit.setFont(new Font("宋体", Font.BOLD, 16));
         b_quit.setBounds(600, height * 3 / 4 - 50, 100, 50);
         b_quit.addActionListener(new A_quit());
-        f.add(b_quit);
+        jp.add(b_quit);
         // -----------add background------------
         ImageIcon img1 = new ImageIcon("bg.jpg");
         JLabel label1 = new JLabel(img1);
-        f.getLayeredPane().add(label1, new Integer(Integer.MIN_VALUE));
+        jp.add(label1, new Integer(Integer.MIN_VALUE));
         label1.setBounds(width / 2, 0, width / 2, height / 2);
         ImageIcon img2 = new ImageIcon("bg2.jpg");
         JLabel label2 = new JLabel(img2);
-        f.getLayeredPane().add(label2, new Integer(Integer.MIN_VALUE));
+        jp.add(label2, new Integer(Integer.MIN_VALUE));
         label2.setBounds(0, height / 2, width / 2, height / 2);
-        JPanel p = (JPanel) f.getContentPane();
-        p.setOpaque(false);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
